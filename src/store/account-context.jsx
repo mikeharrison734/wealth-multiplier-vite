@@ -8,6 +8,7 @@ export const AccountContext = createContext({
   updateRetirementAge: () => { },
   addAccount: () => { },
   updateAccount: () => { },
+  removeAccount: () => { },
 });
 
 function accountReducer(state, action) {
@@ -53,6 +54,27 @@ function accountReducer(state, action) {
     };
   }
 
+  if (action.type === "REMOVE_ACCOUNT") {
+    let updatedAccounts = [...state.accounts];
+    const removedAccountIndex = updatedAccounts.findIndex(
+      (account) => account.id === action.payload.id
+    );
+
+    console.log(`removedAccountIndex: ${removedAccountIndex}`);
+    console.log(`updatedAccounts: ${updatedAccounts}`);
+
+    updatedAccounts.splice(removedAccountIndex, 1);
+
+    console.log(`updatedAccounts: ${updatedAccounts}`);
+
+
+
+    return {
+      ...state,
+      accounts: updatedAccounts,
+    }
+  }
+
   if (action.type === "UPDATE_CURRENT_AGE") {
     const updatedAge = action.payload;
 
@@ -76,7 +98,13 @@ export default function AccountContextProvider({ children }) {
   const [accountState, accountDispatch] = useReducer(accountReducer, {
     currentAge: 0,
     retirementAge: 0,
-    accounts: [],
+    accounts: [{
+      id: 1,
+      currentInvestments: 0,
+      monthlyInvestment: 0,
+      monthlyInvestmentGrowth: 0,
+      totalCashAtRetirement: 0,
+    }],
   });
 
   function handleAddAccount() {
@@ -108,6 +136,13 @@ export default function AccountContextProvider({ children }) {
     })
   }
 
+  function handleRemoveAccount(accountId) {
+    accountDispatch({
+      type: "REMOVE_ACCOUNT",
+      payload: { id: accountId, }
+    })
+  }
+
   const ctxValue = {
     currentAge: accountState.currentAge,
     retirementAge: accountState.retirementAge,
@@ -116,6 +151,7 @@ export default function AccountContextProvider({ children }) {
     updateAccount: handleUpdateAccount,
     updateCurrentAge: handleUpdateCurrentAge,
     updateRetirementAge: handleUpdateRetirementCurrentAge,
+    removeAccount: handleRemoveAccount,
   };
 
   return (

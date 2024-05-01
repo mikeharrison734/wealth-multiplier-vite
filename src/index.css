@@ -42,7 +42,11 @@ ul {
   list-style-type: none;
 }
 
-.account-button {
+/* .account-button {
+  border-radius: 11px 11px 0px 0px;
+} */
+
+.account-tab-button {
   border-radius: 11px 11px 0px 0px;
 }
 

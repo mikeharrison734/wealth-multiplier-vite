@@ -1,13 +1,26 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../store/account-context";
 import Account from "./Account";
 
 export default function AccountContainer() {
-  const { accounts, addAccount } = useContext(AccountContext);
-  const [activeAccountId, setActiveAccountId] = useState();
+  const { accounts, addAccount, removeAccount } = useContext(AccountContext);
+  const [activeAccountId, setActiveAccountId] = useState(1);
+
+  if (activeAccountId > accounts[accounts.length-1].id) {
+    setActiveAccountId(accounts[accounts.length-1].id);
+  }
 
   function handleSetActiveAccountId(id) {
     setActiveAccountId(id);
+  }
+
+  function handleRemoveAccount(id) {
+    removeAccount(id);
+  }
+
+  function handleAddAccount() {
+    addAccount();
+    setActiveAccountId(Number((accounts[accounts.length-1]).id)+1);
   }
 
   return (
@@ -19,18 +32,18 @@ export default function AccountContainer() {
             cssClasses = "account-button open-tab";
           }
           return (
-            <button
-              key={account.id}
-              className={cssClasses}
-              onClick={() => handleSetActiveAccountId(account.id)}
-            >
-              Account {account.id}
-            </button>
+            <div className="account-tab-button" key={account.id}>
+              <button
+                className={cssClasses}
+                onClick={() => handleSetActiveAccountId(account.id)}
+              >Account {account.id} </button>
+              <button className="bg-transparent text-white" onClick={() => handleRemoveAccount(account.id)}>x</button>
+            </div>
           );
         })}
         <button
           className="bg-transparent text-white add-button"
-          onClick={addAccount}
+          onClick={handleAddAccount}
         >
           +
         </button>
