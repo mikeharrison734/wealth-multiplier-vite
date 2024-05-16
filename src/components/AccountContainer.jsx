@@ -27,9 +27,9 @@ export default function AccountContainer() {
     <div className="account-container">
       <div id="tabs" className="d-flex w-100 border-bottom border-white">
         {accounts.map((account) => {
-          let cssClasses = "bg-transparent text-white account-button";
+          let cssClasses = "bg-transparent text-white account-button border-0";
           if (account.id === activeAccountId) {
-            cssClasses = "account-button open-tab";
+            cssClasses = "account-button open-tab border-0";
           }
           return (
             <div className="account-tab-button" key={account.id}>
@@ -37,12 +37,12 @@ export default function AccountContainer() {
                 className={cssClasses}
                 onClick={() => handleSetActiveAccountId(account.id)}
               >Account {account.id} </button>
-              <button className="bg-transparent text-white" onClick={() => handleRemoveAccount(account.id)}>x</button>
+              <button className="bg-transparent text-white border-0 tab-action-button" onClick={() => handleRemoveAccount(account.id)}>x</button>
             </div>
           );
         })}
         <button
-          className="bg-transparent text-white add-button"
+          className="bg-transparent text-white tab-action-button"
           onClick={handleAddAccount}
         >
           +
