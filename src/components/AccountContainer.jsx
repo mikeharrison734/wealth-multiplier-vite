@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AccountContext } from "../store/account-context";
 import Account from "./Account";
 

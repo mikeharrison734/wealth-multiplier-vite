@@ -5,10 +5,9 @@ import { AccountContext } from "../store/account-context";
 import currencyFormatter from "../util/currency";
 
 export default function Account({ accountId }) {
-  const { currentAge, retirementAge, accounts, updateAccount } = useContext(AccountContext);
+  const { currentAge, retirementAge, accounts, updateAccount } =
+    useContext(AccountContext);
   const account = accounts.find((account) => account.id === accountId);
-
-  console.log(`Account currentAge: ${currentAge}`);
 
   const currentInvestments = account.currentInvestments;
   const monthlyInvestment = account.monthlyInvestment;
@@ -18,12 +17,23 @@ export default function Account({ accountId }) {
   const retirementAgeInMonths = retirementAge * 12.0;
 
   function calculateTotalCash() {
+    if (account.chartData) {
+      account.chartData = [];
+    }
+
     let currentROI = 5.5 + (retirementAge - currentAge) * 0.1;
     if (currentROI > 10.0) currentROI = 10.0;
     let currentMonthlyInvestment = monthlyInvestment;
 
     let tempTotalCash = currentInvestments;
     for (let i = currentAgeInMonths; i < retirementAgeInMonths; i++) {
+      if (i % 12.0 === 0) {
+        account.chartData.push({
+          cash: +tempTotalCash,
+          age: i / 12,
+        });
+      }
+
       if (i > 0 && i % 12.0 === 0) {
         if (i / 12.0 > 20) {
           currentROI -= 0.1;
@@ -57,6 +67,10 @@ export default function Account({ accountId }) {
     if (invalidInput) return;
 
     calculateTotalCash();
+    account.chartData.push({
+      cash: account.totalCashAtRetirement,
+      age: retirementAge,
+    });
 
     updateAccount({ ...account });
   }
@@ -94,7 +108,8 @@ export default function Account({ accountId }) {
         Calculate
       </button>
       <h3 className="mt-2">
-        Total Cash At Retirement: {currencyFormatter.format(account.totalCashAtRetirement)}
+        Total Cash At Retirement:{" "}
+        {currencyFormatter.format(account.totalCashAtRetirement)}
       </h3>
     </form>
   );

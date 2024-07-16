@@ -28,6 +28,7 @@ function accountReducer(state, action) {
       monthlyInvestment: 0,
       monthlyInvestmentGrowth: 0,
       totalCashAtRetirement: 0,
+      chartData: [],
     });
 
     return {
@@ -60,14 +61,7 @@ function accountReducer(state, action) {
       (account) => account.id === action.payload.id
     );
 
-    console.log(`removedAccountIndex: ${removedAccountIndex}`);
-    console.log(`updatedAccounts: ${updatedAccounts}`);
-
     updatedAccounts.splice(removedAccountIndex, 1);
-
-    console.log(`updatedAccounts: ${updatedAccounts}`);
-
-
 
     return {
       ...state,
@@ -104,6 +98,7 @@ export default function AccountContextProvider({ children }) {
       monthlyInvestment: 0,
       monthlyInvestmentGrowth: 0,
       totalCashAtRetirement: 0,
+      chartData: [],
     }],
   });
 
