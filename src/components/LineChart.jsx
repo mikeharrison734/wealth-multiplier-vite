@@ -1,26 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { useContext, useEffect, useRef } from "react";
 import { AccountContext } from "../store/account-context";
 import {
-  CategoryScale,
   Chart as ChartJS,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+  registerables
+} from "chart.js/auto";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(...registerables);
 
 export default function LineChart() {
   const { accounts, currentAge, retirementAge } = useContext(AccountContext);
@@ -45,9 +30,7 @@ export default function LineChart() {
           }
         }
       });
-
-      console.log(cash);
-
+      
       chartData = {
         labels: labels,
         datasets: [
